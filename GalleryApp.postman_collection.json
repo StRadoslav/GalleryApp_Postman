@@ -1,0 +1,637 @@
+{
+	"info": {
+		"_postman_id": "55334b22-f694-4366-8f50-29816834984d",
+		"name": "GalleryApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authorization",
+			"item": [
+				{
+					"name": "GetAllGalleries",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e2b9e69f-d1b6-4d21-97d9-a2c3a9638a42",
+								"exec": [
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check the length of the target\", function () {\r",
+									"     pm.expect(jsonData.galleries).to.have.lengthOf(10);\r",
+									"    });\r",
+									"    \r",
+									"    \r",
+									"\r",
+									"\r",
+									"var text = \"\";\r",
+									"var possible = \"abcdefghijklmnopqrstuvwxyz\";\r",
+									"for (var i = 0; i < 5; i++) {\r",
+									"    text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+									"}\r",
+									"\r",
+									"postman.setEnvironmentVariable('emailBoba', 'bobs+'+text + '@yahoo.com');\r",
+									"\r",
+									"\r",
+									"\r",
+									"postman.setEnvironmentVariable('count',jsonData.count);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}galleries?page=1&term=\n",
+							"host": [
+								"{{apiUrl}}galleries"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "term",
+									"value": "\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RegisterUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fb6f9feb-a5d6-4068-8b12-f8a58a00ecba",
+								"exec": [
+									"var jsonData= JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"token12\", jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"postar\",\r\n    \"last_name\": \"postar1\",\r\n    \"email\": \"{{emailBoba}}\",\r\n    \"password\": \"postman123\",\r\n    \"password_confirmation\": \"postman123\",\r\n    \"terms_and_conditions\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}auth/register",
+							"host": [
+								"{{apiUrl}}auth"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ead45427-11b9-4022-bb20-2020c430280d",
+								"exec": [
+									"var jsonData= JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"userId\", jsonData.user_id);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{emailBoba}}\",\r\n    \"password\": \"postman123\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}auth/login",
+							"host": [
+								"{{apiUrl}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "WorkWithGallery",
+			"item": [
+				{
+					"name": "AllGalleries_LogIn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d9527005-0257-46d1-8d8e-1bd0b993033b",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Check the length of the target\", function () {\r",
+									"    pm.expect(jsonData.galleries).to.have.lengthOf(10);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token12}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{apiUrl}}galleries?page=1&term=\n",
+							"host": [
+								"{{apiUrl}}galleries"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "term",
+									"value": "\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateGallery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8efa0d69-fff7-49ca-bf6d-4f87b5ac1ce5",
+								"exec": [
+									"var jsonData= JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"galerijaID\", jsonData.id);\r",
+									"\r",
+									"pm.test('Title is OK', function(){\r",
+									"pm.expect(jsonData.title).to.include('Babin Zub');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token12}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Babin Zub\",\r\n    \"description\": \"Stara planina\",\r\n    \"images\": [\r\n        \"https://upload.wikimedia.org/wikipedia/commons/c/c2/Babin_Zub%2C_Stara_Planina.jpg\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}galleries",
+							"host": [
+								"{{apiUrl}}galleries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutOneMorePicture",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fa5ecd8e-4389-48df-b0cc-71ec0a6ccbb3",
+								"exec": [
+									"var jsonData= JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"pm.test('Naslov je Ok', function(){\r",
+									"pm.expect(jsonData.title).to.include('Srbija-planine');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token12}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Srbija-planine\",\r\n    \"description\": \"turizam\",\r\n    \"images\": [\r\n        \"https://upload.wikimedia.org/wikipedia/commons/c/c2/Babin_Zub%2C_Stara_Planina.jpg\",\r\n        \"https://upload.wikimedia.org/wikipedia/commons/3/3a/Veliki_kr%C5%A1.jpg\"\r\n    ]\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}galleries/{{galerijaID}}",
+							"host": [
+								"{{apiUrl}}galleries"
+							],
+							"path": [
+								"{{galerijaID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CheckLatestGallery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e86c796c-4b46-4cac-a9a0-f84b2f1ee971",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var theLastGallery = jsonData.galleries[0].id;\r",
+									"var myGallery = pm.environment.get(\"galerijaID\");\r",
+									"tests[\"Moja galerija se nalazi na vrhu\"] = theLastGallery == myGallery;\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token12}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}galleries?page=1&term=",
+							"host": [
+								"{{apiUrl}}galleries"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "term",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddCommentToGallery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "76f9ffb2-b33c-44dd-8cd5-735e3bef9d80",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"idKomentara2\", jsonData[0].id);\r",
+									"\r",
+									"\r",
+									"\r",
+									"//hocu da proverim da li je komentar poslat na dobru galeriju. zbog toga getujem id galerije i stavljam u novu varijablu. zatim uporedjujem da li je ta zapamcena vrednost ista sa vrednoscu iz seponsa\r",
+									"\r",
+									"var galerijaid = pm.variables.get(\"galerijaID\");\r",
+									"\r",
+									"\r",
+									" tests[\"Id galerije je ok\"] = jsonData[0].gallery_id==galerijaid;\r",
+									"\r",
+									"//proveravam da li je opis dobar\r",
+									"  pm.test(\"Description is ok\", function () {\r",
+									"   pm.expect(jsonData[0].body).to.equal(\"najlepse planine\");\r",
+									" });\r",
+									"\r",
+									"//proveravam da li je dobro zapamcen user koji je kreirao ovaj komentar\r",
+									"var idUsera = pm.variables.get(\"userId\");\r",
+									"tests[\"User je ok\"] = jsonData[0].user_id==idUsera;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer{{token12}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gallery_id\": \"{{galerijaID}}\",\r\n    \"body\": \"najlepse planine Srbije 3\"\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}comments",
+							"host": [
+								"{{apiUrl}}comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditGallery",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ebda9cc5-2bbc-45dc-9a42-17e24635ed62",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token12}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Najlepse Planine - Srbija \",\r\n    \"description\": \"Vrhovi\",\r\n    \"images\": [\r\n        \"https://upload.wikimedia.org/wikipedia/commons/c/c2/Babin_Zub%2C_Stara_Planina.jpg\",\r\n        \"https://upload.wikimedia.org/wikipedia/commons/3/3a/Veliki_kr%C5%A1.jpg\"\r\n    ]\r\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}galleries/{{galerijaID}}",
+							"host": [
+								"{{apiUrl}}galleries"
+							],
+							"path": [
+								"{{galerijaID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteComment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "668e654a-0775-4ee5-80e4-4fda0fb2d512",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,200]);\r",
+									"\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer{{token12}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{apiUrl}}comments/220",
+							"host": [
+								"{{apiUrl}}comments"
+							],
+							"path": [
+								"220"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
